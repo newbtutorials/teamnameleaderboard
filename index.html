@@ -472,6 +472,12 @@
             border-color: var(--border-hover);
             border-left-color: var(--accent-primary);
         }
+        
+        .schedule-collapsible-header-active {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            border-left-color: var(--accent-primary);
+        }
 
         .schedule-collapsible-header span {
             color: var(--text-main);
@@ -963,8 +969,9 @@
 </footer>
 
 <script>
-    		const SUPABASE_URL = '__SUPABASE_URL_PLACEHOLDER__';
+        const SUPABASE_URL = '__SUPABASE_URL_PLACEHOLDER__';
         const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY_PLACEHOLDER__';
+       
     
     
     if (typeof window.supabaseInstance === 'undefined') {
@@ -1706,8 +1713,12 @@ function selectChampionship(champ) {
         } else {
             filteredSchedule.forEach(row => {
                 const trackFriendly = getTrackName(row.trackname) || row.trackname;
-                const formattedDate = row.racedate ? row.racedate.substring(8, 10) + '/' + row.racedate.substring(5, 7) + '/' + row.racedate.substring(0, 4) + ' ' + row.racedate.substring(11, 16) : 'TBD';
+                
+                const formattedDate = row.racedate ? row.racedate.substring(0, 10).split('-').reverse().join('/') : 'TBD';
                 const formattedRaceTime = row.racedate ? row.racedate.substring(11, 16) : '';
+                
+                //const formattedDate = row.racedate ? row.racedate.substring(8, 10) + '/' + row.racedate.substring(5, 7) + '/' + row.racedate.substring(0, 4) + ' ' + row.racedate.substring(11, 16) : 'TBD';
+                //const formattedRaceTime = row.racedate ? row.racedate.substring(11, 16) : '';
                 
                 let checkpractice = row.practicetimelength > 0 ? 
                     `<div class="session"><span class="session-name">PRACTICE:</span><strong>${row.practicetimelength}</strong><span class="session-unit">MIN</span></div>` : 
