@@ -1127,8 +1127,7 @@
     	
         const SUPABASE_URL = '__SUPABASE_URL_PLACEHOLDER__';
         const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY_PLACEHOLDER__';
-        
-        
+       
 				const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         
@@ -2046,7 +2045,8 @@
             document.getElementById('editschedPracticeInput').value = practicetimelength;
             
             if (racedate && racedate !== 'null' && racedate !== 'undefined') {
-						    document.getElementById('editSchedDateInput').value = racedate;
+						    // Truncate any ISO formatting down to "YYYY-MM-DDTHH:mm"
+						    document.getElementById('editSchedDateInput').value = racedate.slice(0, 16);
 						} else {
 						    document.getElementById('editSchedDateInput').value = '';
 						}
