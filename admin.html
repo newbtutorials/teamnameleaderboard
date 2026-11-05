@@ -2007,7 +2007,7 @@
                         championshipid: champId,
                         raceid: parseInt(round, 10),
                         trackname: track,
-                        racedate: racedate ? new Date(racedate).toISOString() : null,
+                        racedate: racedate ? racedate : null,
                         pitReq: addpitReq,
                         fuelReq: addfuelReq,
                         tyresReq: addtyresReq,
@@ -2046,13 +2046,10 @@
             document.getElementById('editschedPracticeInput').value = practicetimelength;
             
             if (racedate && racedate !== 'null' && racedate !== 'undefined') {
-                const dt = new Date(racedate);
-                const tzOffset = dt.getTimezoneOffset() * 60000;
-                const localISOTime = (new Date(dt - tzOffset)).toISOString().slice(0, 16);
-                document.getElementById('editSchedDateInput').value = localISOTime;
-            } else {
-                document.getElementById('editSchedDateInput').value = '';
-            }
+						    document.getElementById('editSchedDateInput').value = racedate;
+						} else {
+						    document.getElementById('editSchedDateInput').value = '';
+						}
 
             document.getElementById('scheduleEditBox').style.display = 'block';
             window.scrollTo({ top: document.getElementById('scheduleEditBox').offsetTop - 50, behavior: 'smooth' });
@@ -2081,7 +2078,7 @@
                     .update({
                         raceid: parseInt(round, 10),
                         trackname: track,
-                        racedate: racedate ? new Date(racedate).toISOString() : null,
+                        racedate: racedate ? racedate : null,
                         pitReq: pitstopRequired,
                         fuelReq: pitfuelRequired,
                         tyresReq: pittyresRequired,
