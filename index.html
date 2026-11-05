@@ -4,29 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="titleNameDisplay">ACC Community Leaderboard</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600;700&display=swap" rel="stylesheet">
     <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            --bg-body: #0a0812;
-            --bg-card: #120d24;
-            --bg-card-hover: #191133;
-            --border-subtle: #914cf2;
-            
-            --accent-primary: #ea06ed; /* Cyber Magenta / Neon Pink */
-            --accent-glow: rgba(234, 6, 237, 0.25);
-            --border-hover: #ea06ed;
-            
-            --accent-secondary: #06f5ff; /* Synthwave Cyan */
-            --accent-cyan-glow: rgba(6, 245, 255, 0.3);
-            --accent-gold: #fde047;
-            
-            --text-main: #d4d4d4;
-            --text-muted: #a0a0c0;
-            --text-light: #ffffff;
-            --accent-green: #10b981;
+            --bg-body: #0d0e12;
+            --bg-card: #16181f;
+            --bg-card-hover: #1f222b;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.2);
+            --accent-primary: #3182ce;
+            --accent-glow: rgba(239, 68, 68, 0.15);
+            --accent-gold: #f59e0b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-light: #cbd5e1;
+            --accent-green: #22c55e;
         }
 
         * {
@@ -34,15 +27,17 @@
         }
 
         body {
-            font-family: "Arial Narrow", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
-            margin: 0 20px 20px 20px;
-            padding: 10px 0px 0px 0px;
+            margin: 0;
+            padding: 0px 20px 0px 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            letter-spacing: 0.05em;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(10, 11, 15, 0.95) 0%, transparent 60%);
         }
 
         a { text-decoration: none; }
@@ -55,20 +50,19 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0;
+            padding: 9px 0px;
         }
 
         .container {
             width: 100%;
             max-width: 950px;
-            margin: 0 auto;
         }
 
         header {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 0px;
         }
 
         .logo-link {
@@ -79,10 +73,10 @@
             text-align: center;
         }
         
-       .logo-text {
+        .logo-text {
             font-family: system-ui, -apple-system, sans-serif;
             border: 1px solid var(--border-subtle);
-            background: linear-gradient(135deg, #120d24 0%, #120d24 100%);
+            background: linear-gradient(135deg, #181a23 0%, #111319 100%);
             border-radius: 10px;
             padding: 22px 10px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
@@ -109,7 +103,7 @@
         .subtitle {
             margin-top: 8px;
             font-size: 11px;
-            color: var(--text-light);
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 2px;
         }
@@ -123,66 +117,119 @@
         }
 
         /* =========================================
+           TOP SITE NAVIGATION MENU
+        ========================================= */
+        .site-nav-menu {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: right;
+            flex-wrap: wrap;
+            margin: 20px 0px 20px 0px;
+            padding: 0px 0px 0px 0px;
+        }
+
+        .site-nav-link {
+            background: #1b1e28;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-light);
+            padding: 6px 14px 8px 14px;
+            border-radius: 8px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            margin: 0px 0px 0px 0px;
+        }
+
+        .site-nav-link:hover, .site-nav-link.active {
+            background: var(--bg-card-hover);
+            color: #fff;
+            border-color: var(--border-hover);
+            border-left: 3px solid var(--accent-primary);
+            transform: translateY(-1px);
+        }
+
+        /* =========================================
            BREADCRUMBS & NAVIGATION BUTTONS
         ========================================= */
         .breadcrumbs {
             display: flex;
             gap: 12px;
             align-items: center;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
-            margin-bottom: 20px;
-            padding: 12px 20px;
+            margin: 20px 0px 20px 0px;
+            padding: 10px 16px;
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            font-family: monospace;
+            border-radius: 8px;
         }
 
         .breadcrumb-item {
             cursor: pointer;
             color: var(--text-light);
             transition: color 0.2s;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .breadcrumb-item:hover {
-            color: var(--accent-secondary);
-            text-shadow: 0 0 8px var(--accent-cyan-glow);
+            color: var(--text-main);
         }
 
         .breadcrumb-item.active {
             color: var(--accent-primary);
             cursor: default;
-            text-shadow: 0 0 8px var(--accent-glow);
         }
 
         .breadcrumb-separator {
-            color: var(--border-subtle);
+            color: #475569;
         }
 
         .back-btn {
-            background: var(--bg-card-hover);
-            border: 1px solid var(--accent-primary);
-            color: #ffffff;
-            padding: 7px 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-light);
+            padding: 9px 18px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 12px;
-            font-family: monospace;
-            font-weight: bold;
+            font-size: 0.85rem;
+            font-weight: 700;
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
             margin-bottom: 20px;
-            box-shadow: 0 0 5px var(--accent-primary);
-            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .back-btn:hover {
+            background: var(--bg-card-hover);
+            color: #fff;
+            border-color: var(--border-hover);
+        }
+        
+        .back-btn-neat {
             background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
             color: var(--text-light);
-            border-color: var(--accent-secondary);
-            box-shadow: 0 0 5px var(--accent-secondary);
+            padding: 9px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-btn-neat:hover {
+            background: var(--bg-card-hover);
+            color: #fff;
+            border-color: var(--accent-primary);
         }
 
         /* =========================================
@@ -193,18 +240,16 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 15px;
-            border-bottom: 2px solid var(--accent-primary);
+            border-bottom: 2px solid var(--border-subtle);
             padding-bottom: 8px;
         }
 
         .section-title {
-            font-size: 14px;
+            font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--accent-secondary);
-            font-weight: 700;
-            font-family: monospace;
-            text-shadow: 0 0 8px var(--accent-glow);
+            letter-spacing: 2.5px;
+            color: var(--text-muted);
+            font-weight: 800;
         }
 
         .grid-container {
@@ -217,33 +262,36 @@
         .selection-card {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
+            border-left: 4px solid #475569;
+            border-radius: 10px;
             padding: 20px 24px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             display: flex;
             align-items: center;
             gap: 20px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
         }
 
         .selection-card:hover {
             background: var(--bg-card-hover);
-            border-color: var(--accent-primary);
-            transform: translateY(-2px);
-            box-shadow: 0 0 20px var(--accent-glow);
+            border-color: var(--border-hover);
+            border-left-color: var(--accent-primary);
+            transform: translateX(4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
         }
 
         .card-icon {
             width: 44px;
             height: 44px;
-            background: rgba(6, 245, 255, 0.05);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border-subtle);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--accent-secondary);
+            color: var(--text-light);
             flex-shrink: 0;
-            box-shadow: 0 0 10px var(--accent-cyan-glow);
         }
 
         .card-icon svg {
@@ -262,17 +310,14 @@
 
         .selection-card h3 {
             margin: 0 0 6px 0;
-            font-size: 18px;
-            color: var(--text-light);
-            font-style: italic;
-            text-transform: uppercase;
-            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+            font-weight: 800;
         }
 
         .selection-card p {
             margin: 0;
-            font-size: 12px;
-            font-family: monospace;
+            font-size: 0.85rem;
             color: var(--text-muted);
         }
 
@@ -287,25 +332,29 @@
             background: var(--bg-card);
             padding: 16px;
             border: 1px solid var(--border-subtle);
-            box-shadow: 0 0 15px var(--accent-cyan-glow);
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
         }
         
         .serverinfo {
+            gap: 10px;
             margin-bottom: 10px;
             background: var(--bg-card);
             padding: 16px;
             border: 1px solid var(--border-subtle);
+            border-radius: 10px;
         }
-
+        
+   
         .sess-btn {
-            background: var(--bg-card-hover);
+            background: #1b1e28;
             border: 1px solid var(--border-subtle);
-            color: var(--accent-secondary);
+            color: var(--text-light);
             padding: 4px 8px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 12px;
-            font-family: monospace;
-            font-weight: bold;
+            font-size: 0.85rem;
+            font-weight: 700;
             letter-spacing: 0.5px;
             transition: all 0.2s ease;
             display: inline-flex;
@@ -314,16 +363,15 @@
         }
 
         .sess-btn:hover {
-            background: var(--accent-primary);
+            background: #252936;
             color: #fff;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 15px var(--accent-glow);
+            border-color: var(--border-hover);
             transform: translateY(-2px);
         }
         
         .sess-btn.active {
 		    color: white;
-		    border-color: var(--accent-primary);
+		    border-color: #63b3ed;
 				}
 
         /* =========================================
@@ -332,8 +380,10 @@
         .table-wrapper {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
+            border-radius: 10px;
             overflow: hidden;
-            margin: 0px 0px 10px 0px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            margin-bottom: 20px;
         }
 
         table {
@@ -344,24 +394,21 @@
 
         th, td {
             padding: 16px 20px;
-            font-size: 14px;
+            font-size: 0.92rem;
         }
 
         th {
-            background-color: var(--bg-body);
-            color: var(--accent-primary);
+            background-color: #111319;
+            color: var(--text-muted);
             text-transform: uppercase;
-            font-size: 12px;
-            font-family: monospace;
+            font-size: 11px;
             letter-spacing: 2px;
-            border-bottom: 2px solid var(--accent-primary);
-            font-weight: bold;
-            text-shadow: 0 0 5px var(--accent-glow);
+            border-bottom: 2px solid var(--border-subtle);
+            font-weight: 800;
         }
-        
 
         td {
-            border-bottom: 1px solid #1a1233;
+            border-bottom: 1px solid var(--border-subtle);
             color: var(--text-main);
         }
 
@@ -370,7 +417,7 @@
         }
 
         tr:hover td {
-            background-color: rgba(6, 245, 255, 0.03);
+            background-color: rgba(255, 255, 255, 0.02);
         }
 
         /* Position Podiums */
@@ -380,32 +427,26 @@
             justify-content: center;
             width: 32px;
             height: 32px;
-            font-family: monospace;
-            font-weight: bold;
-            font-style: italic;
-            font-size: 16px;
+            border-radius: 8px;
+            font-weight: 900;
+            font-size: 0.9rem;
         }
 
         .pos-1 { 
-            background: rgba(6, 245, 255, 0.08); 
-            color: var(--accent-secondary); 
-            border-right: 1px solid var(--accent-secondary);
-            box-shadow: 0 0 15px var(--accent-cyan-glow);
+            background: linear-gradient(135deg, #f59e0b, #d97706); 
+            color: #000; 
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
         }
         .pos-2 { 
-            background: rgba(234, 6, 237, 0.08); 
-            color: var(--accent-primary); 
-            border-right: 1px solid var(--accent-primary);
-            box-shadow: 0 0 12px var(--accent-glow);
+            background: linear-gradient(135deg, #cbd5e1, #64748b); 
+            color: #0f172a; 
         }
         .pos-3 { 
-            background: rgba(145, 76, 242, 0.08); 
-            color: var(--border-subtle); 
-            border-right: 1px solid var(--border-subtle);
-            box-shadow: 0 0 12px rgba(145, 76, 242, 0.3);
+            background: linear-gradient(135deg, #b45309, #78350f); 
+            color: #fff; 
         }
         .pos-other { 
-            background: var(--bg-card-hover); 
+            background: #20232d; 
             color: var(--text-muted); 
             border: 1px solid var(--border-subtle); 
         }
@@ -414,6 +455,8 @@
         .schedule-collapsible-header {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
+            border-left: 4px solid #475569;
+            border-radius: 10px;
             padding: 16px 22px;
             cursor: pointer;
             display: flex;
@@ -422,31 +465,32 @@
             transition: all 0.2s ease;
             user-select: none;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            margin-bottom: 10px;
         }
 
         .schedule-collapsible-header:hover {
             background: var(--bg-card-hover);
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 15px var(--accent-glow);
+            border-color: var(--border-hover);
+            border-left-color: var(--accent-primary);
+        }
+        
+        .schedule-collapsible-header-active {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            border-left-color: var(--accent-primary);
         }
 
         .schedule-collapsible-header span {
-            color: var(--text-light);
-            font-size: 16px;
-            font-weight: bold;
-            font-style: italic;
-            text-transform: uppercase;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 800;
         }
 
         span.schedule-toggle-icon {
-            color: var(--accent-secondary);
-            font-size: 12px;
-            font-family: monospace;
-            font-weight: bold;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-style: normal;
         }
 
         .schedule-body-content {
@@ -477,15 +521,17 @@
             padding: 18px 22px;
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
+            border-left: 3px solid #475569;
+            border-radius: 10px;
             box-sizing: border-box;
             margin-bottom: 10px;
             transition: all 0.2s ease;
         }
 
         .race-card:hover {
-            border-color: var(--accent-primary);
+            border-color: var(--border-hover);
+            border-left-color: var(--accent-primary);
             background: var(--bg-card-hover);
-            box-shadow: 0 0 15px var(--accent-glow);
             transform: translateX(3px);
         }
 
@@ -501,20 +547,17 @@
 
         .race-number-label {
             font-size: 9px;
-            font-family: monospace;
-            font-weight: bold;
+            font-weight: 800;
             letter-spacing: 2px;
-            color: var(--accent-secondary);
+            color: var(--text-muted);
         }
 
         .race-number-value {
             font-size: 34px;
             line-height: 1;
-            font-weight: bold;
-            font-family: monospace;
-            color: var(--text-light);
+            font-weight: 900;
+            color: #fff;
             margin-top: 4px;
-            text-shadow: 0 0 10px var(--accent-cyan-glow);
         }
 
         .race-main {
@@ -535,36 +578,30 @@
 
         .race-label {
             font-size: 10px;
-            font-family: monospace;
-            font-weight: bold;
+            font-weight: 800;
             letter-spacing: 1.5px;
-            color: var(--accent-secondary);
+            color: var(--text-muted);
             margin-bottom: 4px;
         }
 
         .track-name {
-            font-size: 18px;
-            font-weight: bold;
-            font-style: italic;
+            font-size: 20px;
+            font-weight: 900;
             letter-spacing: 1px;
-            color: var(--text-light);
-            text-transform: uppercase;
+            color: #fff;
         }
 
         .date-name {
-            font-size: 14px;
-            font-weight: bold;
-            font-family: monospace;
-            color: var(--text-light);
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
         }
 
         .local-tz-display {
             color: var(--accent-gold);
-            font-size: 12px;
-            font-family: monospace;
-            font-weight: bold;
+            font-size: 13px;
+            font-weight: 800;
             margin-top: 2px;
-            text-shadow: 0 0 8px rgba(253, 224, 71, 0.3);
         }
 
         .race-requirements {
@@ -583,14 +620,13 @@
 
         .requirement-label {
             font-size: 9px;
-            font-family: monospace;
-            font-weight: bold;
+            font-weight: 800;
             letter-spacing: 1px;
-            color: var(--accent-secondary);
+            color: var(--text-muted);
             margin-bottom: 4px;
         }
 
-        .requirement-value { font-size: 14px; }
+        .requirement-value { font-size: 15px; }
 
         .race-sessions {
             grid-area: sessions;
@@ -611,69 +647,60 @@
         .session:last-child { border-right: none; }
 
         .session-name {
-            color: var(--accent-secondary);
+            color: var(--text-muted);
             font-size: 9px;
-            font-family: monospace;
-            font-weight: bold;
+            font-weight: 800;
             letter-spacing: 1px;
             margin-right: 6px;
         }
 
         .session strong {
             color: #fff;
-            font-size: 13px;
-            font-family: monospace;
+            font-size: 14px;
         }
 
         .session-unit {
             color: var(--accent-gold);
             font-size: 8px;
-            font-family: monospace;
-            font-weight: bold;
+            font-weight: 800;
             margin-left: 3px;
         }
         
-        hr.rgbhr {
-		    width: 340px;
-		    height: 1px;
-		    border: none;
-		    background: linear-gradient(to right, var(--bg-card) 0%, var(--accent-primary) 15%, var(--accent-secondary) 50%, var(--accent-primary) 85%, var(--bg-card) 100%);
+        hr.rgbhr{
+		    width:340px;
+		    height:1px;
+		    border:none;
+		    background:linear-gradient(to right, #16181f 0%, var(--accent-primary) 50%, #16181f 100%);
 		}
 
         /* States & Utilities */
         .loading {
             text-align: center;
             padding: 60px;
-            color: var(--accent-secondary);
+            color: var(--text-muted);
             font-size: 1.1rem;
-            font-family: monospace;
-            font-weight: bold;
-            text-shadow: 0 0 10px var(--accent-cyan-glow);
+            font-weight: 600;
         }
 
         .error {
-            background-color: rgba(234, 6, 237, 0.1);
-            border: 1px solid var(--accent-primary);
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
             color: #fca5a5;
             padding: 16px 20px;
+            border-radius: 8px;
             margin-top: 15px;
-            font-family: monospace;
-            font-weight: bold;
-            box-shadow: 0 0 15px var(--accent-glow);
+            font-weight: 600;
         }
 
         .hidden { display: none !important; }
 
         /* Footer */
         footer {
-            background-color: var(--bg-body);
+            background-color: #0a0b0f;
             border-top: 1px solid var(--border-subtle);
-            padding: 0px 20px;
-            margin-top: auto;
             color: var(--text-muted);
             font-size: 0.8rem;
             text-align: center;
-            font-family: monospace;
         }
 
         .footer-content {
@@ -685,54 +712,7 @@
             gap: 10px;
         }
 
-        .footer-copy { color: var(--text-muted); font-weight: bold; }
-
-        /* Responsive */
-        @media (max-width: 800px) {
-            .race-card {
-                grid-template-columns: 60px 1fr;
-                grid-template-areas:
-                    "number main"
-                    "number requirements"
-                    "number sessions";
-                gap: 12px;
-                padding: 14px;
-            }
-            .race-sessions { flex-wrap: wrap; gap: 8px 0; }
-        }
-        /* =========================================
-           TOP SITE NAVIGATION MENU
-        ========================================= */
-        .site-nav-menu {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: right;
-            flex-wrap: wrap;
-            margin: 10px 0px 10px 0px;
-            padding: 0px 0px 0px 0px;
-        }
-
-        .site-nav-link {
-            background: #1b1e28;
-            border: 1px solid var(--border-subtle);
-            color: var(--text-light);
-            padding: 6px 14px 8px 14px;
-            border-radius: 8px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            transition: all 0.2s ease;
-            margin: 10px 0px 0px 0px;
-        }
-
-        .site-nav-link:hover, .site-nav-link.active {
-            background: var(--bg-card-hover);
-            color: #fff;
-            border-color: var(--border-hover);
-            border-left: 3px solid var(--accent-primary);
-            transform: translateY(-1px);
-        }
+        .footer-copy { color: var(--text-muted); font-weight: 600; }
         
         .social-links {
 		    display: flex;
@@ -765,28 +745,19 @@
 		.social-links a:hover {
 		    color: var(--accent-primary);
 		}
-		
-		.back-btn-neat {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-light);
-            padding: 9px 18px;
-            border-radius: 1px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 700;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 17px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
 
-        .back-btn-neat:hover {
-            background: var(--bg-card-hover);
-            color: #fff;
-            border-color: var(--accent-primary);
+        /* Responsive */
+        @media (max-width: 800px) {
+            .race-card {
+                grid-template-columns: 60px 1fr;
+                grid-template-areas:
+                    "number main"
+                    "number requirements"
+                    "number sessions";
+                gap: 12px;
+                padding: 14px;
+            }
+            .race-sessions { flex-wrap: wrap; gap: 8px 0; }
         }
     </style>
 </head>
@@ -795,38 +766,36 @@
 <div class="page-wrapper">
     <div class="container">
     	
-    	<div class="social-links hidden" id="soc-links">
-	    <a href="https://discord.gg" target="_blank" aria-label="Discord" id="discordLink" class="hidden">
-	        <span style="font-weight:700; font-size:11px;">DISCORD &nbsp;</span>
-	        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-	            <title>Discord</title>
-	            <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
-	    </a>
+    <div class="social-links hidden" id="soc-links">
+        <a href="https://discord.gg" target="_blank" aria-label="Discord" id="discordLink" class="hidden">
+            <span style="font-weight:700; font-size:11px;">DISCORD &nbsp;</span>
+            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <title>Discord</title>
+                <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+        </a>
 
-	    <a href="https://youtube.com" target="_blank" aria-label="YouTube" id="youtubeLink" class="hidden">
-	    	<span style="font-weight:700; font-size:11px;">YOUTUBE &nbsp;</span>
-	        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>YouTube</title><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-	    </a>
+        <a href="https://youtube.com" target="_blank" aria-label="YouTube" id="youtubeLink" class="hidden">
+            <span style="font-weight:700; font-size:11px;">YOUTUBE &nbsp;</span>
+            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>YouTube</title><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </a>
 
-	    <a href="https://instagram.com" target="_blank" aria-label="Instagram" id="instagramLink" class="hidden">
-	    	<span style="font-weight:700; font-size:11px;">INSTAGRAM &nbsp;</span>
-	        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Instagram</title><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg>
-	    </a>
+        <a href="https://instagram.com" target="_blank" aria-label="Instagram" id="instagramLink" class="hidden">
+            <span style="font-weight:700; font-size:11px;">INSTAGRAM &nbsp;</span>
+            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Instagram</title><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg>
+        </a>
 
-	    <a href="https://twitch.tv" target="_blank" aria-label="Twitch" id="twitchLink" class="hidden">
-	    	<span style="font-weight:700; font-size:11px;">TWITCH &nbsp;</span>
-	       <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
-	    </a>
-		</div>
-		<span id="pagetop"></span>
+        <a href="https://twitch.tv" target="_blank" aria-label="Twitch" id="twitchLink" class="hidden">
+            <span style="font-weight:700; font-size:11px;">TWITCH &nbsp;</span>
+            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+        </a>
+    </div>
+    	
         <!-- Header -->
-        <header>
-            <!-- Image Logo -->
-            <div id="imageLogoContainer" class="hidden" style="width: 100%; max-width:950px; margin: 0 auto;">
+        <header id="pagetop">
+            <div id="imageLogoContainer" class="hidden" style="width: 100%; max-width: 950px; margin: 0 auto;">
                 <a href="./"><img id="logourlink" width="100%" src="logo.png" alt="Community Logo" class="racing-logo" /></a>
             </div>
 
-            <!-- Text/SVG Logo -->
             <div id="textLogoContainer" class="hidden" style="width: 100%;">
                 <a href="./" class="logo-link">
                     <div class="logo-text">
@@ -839,7 +808,7 @@
             </div>
         </header>
         
-        <div id="loading" class="loading">🏁 LOADING Leagues...</div>
+        <div id="loading" class="loading">Loading Championship Leaderboards...</div>
         <div id="errorMsg" class="error hidden"></div>
 
         <!-- Breadcrumb Navigation -->
@@ -857,20 +826,22 @@
         
         <!-- Step 1a: view hotlap Grid -->
         <div id="hotlapsView" class="hidden">
-        <div id="hotlapFrontView" class="hidden">
-            <div class="section-header">
-                <span class="section-title">Live Hotlap Leaderboard</span>
-            </div>
-            <div class="grid-container">
-            	<a href="hotlaps.html" style="display: block; text-decoration: none; color: inherit;"><div class="selection-card">	
-            		<div class="card-icon"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M12 18v4M8 6h8v6a4 4 0 0 1-8 0V6z"></path></svg></div>
-                <div class="card-content">
-                    <h3>View Live Hotlap Leaderboard</h3>
-                    <p>Realtime Hotlaps Tracked with ACCR-Sync</p>
+            <div id="hotlapFrontView" class="hidden">
+                <div class="section-header">
+                    <span class="section-title">Live Hotlap Leaderboard</span>
                 </div>
-            	</div></a>
-            </div>  
-        </div>
+                <div class="grid-container">
+                    <a href="hotlaps.html" style="display: block; text-decoration: none; color: inherit;">
+                        <div class="selection-card">	
+                            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M12 18v4M8 6h8v6a4 4 0 0 1-8 0V6z"></path></svg></div>
+                            <div class="card-content">
+                                <h3>View Live Hotlap Leaderboard</h3>
+                                <p>Realtime Hotlaps Tracked with ACCR-Sync</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>  
+            </div>
         </div>
         
         <!-- Front Page Championship Schedules Section -->
@@ -885,7 +856,7 @@
 
         <!-- Step 2: Championships Grid -->
         <div id="championshipsView" class="hidden">
-            <button class="back-btn" onclick="resetToLeagues()">&#10094; &nbsp;Back to Leagues</button>
+            <button class="back-btn" onclick="resetToLeagues()">&#10094; &nbsp; Back to Leagues</button>
             <div class="section-header">
                 <span class="section-title">Championship Series</span>
             </div>
@@ -895,8 +866,8 @@
         <!-- Step 3: Championship Rounds & Standings View -->
         <div id="sessionsView" class="hidden">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <button class="back-btn" style="margin-bottom:0;" onclick="backToChampionships()">&#10094; &nbsp;Back to Championships</button>
-                <button class="back-btn" style="margin-bottom:0;" onclick="showSeasonSchedule()">View Season Calendar&nbsp; &#10095;</button>
+                <button class="back-btn" style="margin-bottom:0;" onclick="backToChampionships()">&#10094; &nbsp; Back to Championships</button>
+                <button class="back-btn" style="margin-bottom:0;" onclick="showSeasonSchedule()">View Season Calendar &nbsp; &#10095;</button>
             </div>
           
             <div class="section-header" style="margin-top: 20px;">
@@ -904,8 +875,7 @@
             </div>
             
             <div class="rounds-container" id="sessionsList"></div>
-           
-
+            
             <div class="section-header" style="margin-top: 30px;">
                 <span class="section-title">Championship Standings</span>
             </div>
@@ -931,7 +901,7 @@
                             <th style="text-align: right;">Total Time</th>
                             <th style="text-align:center;">Races</th>
                             <th style="text-align:center;">Class</th>
-                            <th style="text-align: right;">Penalty</th>
+                            <th style="text-align: right;">Penalties</th>
                             <th style="text-align: right;">Total Points</th>
                         </tr>
                     </thead>
@@ -939,12 +909,11 @@
                     </tbody>
                 </table>
             </div>
-            
         </div>
 
         <!-- Step 4: Individual Race Results Leaderboard Table -->
         <div id="leaderboardView" class="hidden">
-            <button class="back-btn" onclick="backToSessions()">&#10094; &nbsp;Back to Standings</button>
+            <button class="back-btn" onclick="backToSessions()">&#10094; &nbsp; Back to Standings</button>
             <div class="section-header">
                 <span class="section-title" id="racedescription">Race Results</span>
             </div>
@@ -968,39 +937,43 @@
         
         <!-- Step 5: Season Schedule View -->
         <div id="seasonScheduleView" class="hidden">
-            <button class="back-btn" onclick="backToChampionshipFromSchedule()">&#10094; &nbsp;Back to Championship</button>
+            <button class="back-btn" onclick="backToChampionshipFromSchedule()">&#10094; &nbsp; Back to Championship</button>
             <div class="section-header">
                 <span class="section-title" id="scheduleHeaderTitle">Season Schedule</span>
             </div>
             <div>
             	<div id="schedserverInfo"></div>
                 <table>
-                    <tbody id="seasonScheduleTableBody" class="table-wrapper">
+                    <tbody id="seasonScheduleTableBody">
                     </tbody>
                 </table>
-                <br>
             </div>
         </div>
         
+        
         <div style="text-align:center;" id="showRules" class="hidden">
+        	<br>
         	<a href="leaderboard-rules.html" class="back-btn-neat">Leaderboard Rules & Regulations</a>
         </div>
-        
     </div>
 </div>
 
 <!-- Footer -->
 <footer>
     <div class="footer-content">
-        <br><a href="#pagetop" onclick="goToTop(event)" class="back-btn">&#8593; Back to Top</a>
+        <div class="footer-copy">
+        	<br>
+        	<a href="#pagetop" onclick="goToTop(event)" class="back-btn">&#8593; Back to Top</a>
+        </div>
     </div>
 </footer>
 
 <script>
-       const SUPABASE_URL = '__SUPABASE_URL_PLACEHOLDER__';
-       const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY_PLACEHOLDER__';
+        const SUPABASE_URL = '__SUPABASE_URL_PLACEHOLDER__';
+        const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY_PLACEHOLDER__';
        
-        
+    
+    
     if (typeof window.supabaseInstance === 'undefined') {
         window.supabaseInstance = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
@@ -1072,6 +1045,7 @@
                 if (data.usercolor) {
                     const userColor = data.usercolor;
                     document.documentElement.style.setProperty('--accent-primary', userColor);
+                    document.documentElement.style.setProperty('--accent-glow', hexToRgba(userColor, 0.2));
                 }
                 
                 const nameEl = document.getElementById('commNameDisplay');
@@ -1104,7 +1078,9 @@
                 const instagramLink = document.getElementById('instagramLink');
                 const twitchLink = document.getElementById('twitchLink');
                 
-                const viewHotlaps = document.getElementById('hotlapsView');
+                
+                const hotlapsView = document.getElementById('hotlapsView');
+                
                 if (data.accrsync === true) {
                     if (hotlapsView) hotlapsView.classList.remove('hidden');
                     document.getElementById('hotlapFrontView').classList.remove('hidden');
@@ -1132,6 +1108,18 @@
             console.error('Error loading site configuration:', err);
         }
     }
+    
+    function hexToRgba(hex, alpha) {
+        let cleanHex = hex.replace('#', '');
+        if (cleanHex.length === 3) {
+            cleanHex = cleanHex.split('').map(c => c + c).join('');
+        }
+        const num = parseInt(cleanHex, 16);
+        const r = (num >> 16) & 255;
+        const g = (num >> 8) & 255;
+        const b = num & 255;
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
      
     async function fetchAllData() {
         try {
@@ -1156,13 +1144,15 @@
             const { data: drivers, error: dError } = await supabaseClient.from('driverlist').select('*');
             if (dError) throw dError;
             driverListData = drivers || [];
+            
+            
 
             document.getElementById('loading').style.display = 'none';
             renderLeagues();
         } catch (err) {
             document.getElementById('loading').style.display = 'none';
             const errEl = document.getElementById('errorMsg');
-            errEl.innerText = '🏁 RACE CONTROL ERROR: ' + err.message;
+            errEl.innerText = 'Error connecting to Supabase: ' + err.message;
             errEl.classList.remove('hidden');
             console.error(err);
         }
@@ -1276,7 +1266,7 @@
         container.innerHTML = '';
 
         if (!seasonScheduleData || seasonScheduleData.length === 0) {
-            container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 20px; font-family: monospace;">No upcoming schedules found.</div>`;
+            container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 20px;">No upcoming schedules found.</div>`;
             document.getElementById('schedulesFrontView').classList.remove('hidden');
             return;
         }
@@ -1306,13 +1296,13 @@
             let champServerNameHolder = '';
 						let champServerPassHolder = '';
 						
-						// If a server name exists... home page schedule
+						// If a server name exists...
 						if (champServerName) {
 								
-						    champServerNameHolder = `<div class="serverinfo">
+						    champServerNameHolder = `<div id="serverInfo" class="serverinfo">
 						        <div>
-						            <span class="race-label" style="font-size: 15px; font-weight:600;">Server Name:</span><br>
-						            <span style="font-size: 13px; font-weight:600;">${escapeHtml(champServerName)}</span>
+						            <span style="color: var(--accent-gold); font-size: 15px; font-weight:600;">Server Name:</span><br>
+						            <span style="font-size: 14px; font-weight:600;">${escapeHtml(champServerName)}</span>
 						        </div>
 						    `;
 						    
@@ -1320,8 +1310,8 @@
 								if (champServerPass) {
 								    champServerPassHolder = `
 								        <div style="margin-top:10px;">
-								            <span class="race-label" style="font-size: 15px; font-weight:600;">Password:</span>
-								            <span style="font-size: 13px; font-weight:600;">${escapeHtml(champServerPass)}</span>
+								            <span style="color: var(--accent-gold); font-size: 15px; font-weight:600;">Server Password:</span>
+								            <span style="font-size: 14px; font-weight:600;">${escapeHtml(champServerPass)}</span>
 								        </div>
 								        </div>
 								    `;
@@ -1329,36 +1319,40 @@
 									champServerPassHolder = `</div>`;
 								}
 						}
-
-						
-            if (champObj.showschedule === true) {
-						}else{
-
-            rows.sort((a, b) => (Number(a.raceid) || 0) - (Number(b.raceid) || 0));
-
-            const groupWrapper = document.createElement('div');
-            groupWrapper.style.marginBottom = '0px';
             
+            
+							if (champObj.showschedule === true) {
+							}else{
+								
+            rows.sort((a, b) => (Number(a.raceid) || 0) - (Number(b.raceid) || 0));
+						
+						
+              
+            const groupWrapper = document.createElement('div');
+            groupWrapper.style.marginBottom = '10px';
+
             const headerDiv = document.createElement('div');
             headerDiv.className = 'schedule-collapsible-header';
             headerDiv.innerHTML = `
                 <span>${escapeHtml(champTitleName)}</span>
+               
                 <div>
-                    ${champObj && champObj.season_complete ? '<span style="color: var(--accent-gold); font-size: 11px; font-weight:bold; font-family:monospace; margin-right:15px; text-shadow:0 0 8px rgba(253,224,71,0.3);">SEASON COMPLETE</span>' : '<span style="color: var(--accent-green); font-size: 11px; font-weight:bold; font-family:monospace; margin-right:15px; text-shadow:0 0 8px rgba(16,185,129,0.3);">ACTIVE</span>'}
+                    ${champObj && champObj.season_complete ? '<span style="color: var(--accent-gold); font-size: 11px; font-weight:700; margin-right:15px;">SEASON COMPLETE</span>' : '<span style="color: var(--accent-green); font-size: 11px; font-weight:700; margin-right:15px;">ACTIVE</span>'}
                     <span class="schedule-toggle-icon">Expand &#9661;</span>
                 </div>
             `;
 
             const contentDiv = document.createElement('div');
             contentDiv.className = 'schedule-body-content collapsed';
-            
+
             let tableHTML = `
             ${champServerNameHolder}
             ${champServerPassHolder}
             <div class="table-wrapper"><table><tbody>`;
 
-
             rows.forEach(row => {
+            	
+						
                 const trackFriendly = getTrackName(row.trackname) || row.trackname;
                 const formattedRaceDate = row.racedate ? row.racedate.substring(0, 10).split('-').reverse().join('/') : 'TBD';
                 const formattedRaceTime = row.racedate ? row.racedate.substring(11, 16) : '';
@@ -1407,10 +1401,12 @@
                         </div>
                     </td></tr>
                 `;
+              
             });
-
+            
             tableHTML += `</tbody></table></div>`;
             contentDiv.innerHTML = tableHTML;
+            
 
             headerDiv.addEventListener('click', () => {
                 const isCollapsed = contentDiv.classList.toggle('collapsed');
@@ -1443,9 +1439,10 @@
         filteredChamps.sort((a, b) => a.id - b.id);
 
         if (filteredChamps.length === 0) {
-            container.innerHTML = `<p style="color: var(--text-muted); text-align:center; padding: 20px; font-family: monospace;">No championships found for this league.</p>`;
+            container.innerHTML = `<p style="color: var(--text-muted); text-align:center; padding: 20px;">No championships found for this league.</p>`;
         } else {
             filteredChamps.forEach(champ => {
+            	
                 const card = document.createElement('div');
                 card.className = 'selection-card';
                 card.innerHTML = `
@@ -1457,7 +1454,9 @@
                 `;
                 card.addEventListener('click', () => selectChampionship(champ));
                 container.appendChild(card);
+              
             });
+            
         }
 
         document.getElementById('championshipsView').classList.remove('hidden');
@@ -1466,23 +1465,23 @@
     
     let currentClassFilter = 'ALL';
 
-function filterStandingsByClass(classKey, btnElement) {
-    currentClassFilter = classKey;
+		function filterStandingsByClass(classKey, btnElement) {
+		    currentClassFilter = classKey;
 
-    // Update button active states styling
-    document.querySelectorAll('.sess-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    btnElement.classList.add('active');
+		    // Update button active states styling
+		    document.querySelectorAll('.sess-btn').forEach(btn => {
+		        btn.classList.remove('active');
+		    });
+		    btnElement.classList.add('active');
 
-    // Re-run selectChampionship using the currently cached championship object
-    if (window.selectedChampionshipData) {
-        selectChampionship(window.selectedChampionshipData);
-    }
-}
-    
-    
-     // Store currently active championship globally so filter buttons can re-render it
+		    // Re-run selectChampionship using the currently cached championship object
+		    if (window.selectedChampionshipData) {
+		        selectChampionship(window.selectedChampionshipData);
+		    }
+		}
+		  
+		  
+		  // Store currently active championship globally so filter buttons can re-render it
 window.selectedChampionshipData = null;
 
 function selectChampionship(champ) {
@@ -1571,7 +1570,8 @@ function selectChampionship(champ) {
                 totalPoints: 0,
                 wins: 0,
                 totalTimeMs: 0,
-                penaltyTime: 0,
+                penaltyTime: 0
+                ,
                 carModelKey: rec.car_model // <--- Add this line
             };
         }
@@ -1580,7 +1580,7 @@ function selectChampionship(champ) {
         driverMap[driverId].carModelKey = rec.car_model; // <--- Add this line
 
         driverMap[driverId].name = driverName;
-				
+
         if (rec.session_id) {
             driverMap[driverId].sessions.add(rec.session_id);
         }
@@ -1623,9 +1623,6 @@ function selectChampionship(champ) {
         standingsTbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); font-family: monospace;">No standings data available for class ${currentClassFilter}.</td></tr>`;
     } else {
         sortedDrivers.forEach((driver, index) => {
-        	
-        	 
-        	 
             const pos = index + 1;
             let badgeClass = pos === 1 ? 'pos-1' : pos === 2 ? 'pos-2' : pos === 3 ? 'pos-3' : 'pos-other';
 
@@ -1647,11 +1644,9 @@ function selectChampionship(champ) {
     document.getElementById('sessionsView').classList.remove('hidden');
     updateBreadcrumbs();
 }
-
-
-    
-    
-    
+		  
+		  
+		  
     function formatTotalTime(ms) {
         if (!ms || ms <= 0 || ms === 2147483647) return '——';
         const totalSeconds = Math.floor(ms / 1000);
@@ -1675,7 +1670,7 @@ function selectChampionship(champ) {
         filteredSchedule.sort((a, b) => (Number(a.raceid) || 0) - (Number(b.raceid) || 0));
 
         document.getElementById('scheduleHeaderTitle').innerText = `${selectedChampionship.championship_name} - Season ${selectedChampionship.season} - Calendar`;
-
+						        
 				// Check if values exist, otherwise use empty strings
 					const schedServerName = selectedChampionship.servername ?? '';
 					const schedServerPass = selectedChampionship.serverpass ?? '';
@@ -1685,14 +1680,14 @@ function selectChampionship(champ) {
 
 					let serverInfoHTML = '';
 
-					// If a server name exists... 
+					// If a server name exists...
 					if (schedServerName) {
 
 					    serverInfoHTML = `
 					        <div class="serverinfo">
 					            <div>
 					                <span style="color: var(--accent-gold); font-size: 15px; font-weight:600;">Server Name:</span><br>
-					                <span style="font-size: 15px; font-weight:600;">${escapeHtml(schedServerName)}</span>
+					                <span style="font-size: 14px; font-weight:600;">${escapeHtml(schedServerName)}</span>
 					            </div>
 					    `;
 
@@ -1700,8 +1695,8 @@ function selectChampionship(champ) {
 					    if (schedServerPass) {
 					        serverInfoHTML += `
 					            <div style="margin-top:10px;">
-					                <span style="color: var(--accent-gold); font-size: 15px; font-weight:600;">Server Password:</span>
-					                <span style="font-size: 15px; font-weight:600;">${escapeHtml(schedServerPass)}</span>
+					                <span style="color: var(--accent-gold); font-size: 15px; font-weight:600;">Server Password:</span><br>
+					                <span style="font-size: 14px; font-weight:600;">${escapeHtml(schedServerPass)}</span>
 					            </div>
 					        `;
 					    }
@@ -1710,12 +1705,11 @@ function selectChampionship(champ) {
 					}
 
 					// Display server information
-					schedserverInfo.innerHTML = serverInfoHTML;  
-
-
-
+					schedserverInfo.innerHTML = serverInfoHTML;   
+					  
+						
         if (filteredSchedule.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); font-family: monospace;">No schedule entries found for this championship.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted);">No schedule entries found for this championship.</td></tr>`;
         } else {
             filteredSchedule.forEach(row => {
                 const trackFriendly = getTrackName(row.trackname) || row.trackname;
@@ -1731,8 +1725,8 @@ function selectChampionship(champ) {
                     `<div class="session"><span class="session-name">PRACTICE:</span><strong>--</strong><span class="session-unit">MIN</span></div>`;
 
                 tbody.innerHTML += `
-                    <tr><td>
-                       <div class="race-card">
+                    <tr>
+                        <div class="race-card">
                             <div class="race-number">
                                 <span class="race-number-label">RACE</span>
                                 <span class="race-number-value">${row.raceid ?? '—'}</span>
@@ -1768,8 +1762,7 @@ function selectChampionship(champ) {
                                 <div class="session"><span class="session-name">RACE:</span><strong>${row.racetimelength}</strong><span class="session-unit">MIN</span></div>
                             </div>
                         </div>
-                    </td></tr>
-                `;
+                    </tr>`;
             });
         }
 
@@ -1805,7 +1798,7 @@ function selectChampionship(champ) {
             }
         }
         
-        document.getElementById('racedescription').innerHTML = `<span style="font-size:0.8rem; color:var(--text-muted); display:block; margin-top:4px; font-family:monospace;">${selectedChampionship.championship_name} &bull; Race #${raceIdDisplay} &bull; ${raceTrackDisplay} ${displayTimeDate}</span>`;
+        document.getElementById('racedescription').innerHTML = `<span style="font-size:0.9rem; color:var(--text-muted); display:block; margin-top:4px;">${selectedChampionship.championship_name} &bull; Race #${raceIdDisplay} &bull; ${raceTrackDisplay} ${displayTimeDate}</span>`;
 
         results.sort((a, b) => Number(a.final_position) - Number(b.final_position));
 
@@ -1817,11 +1810,11 @@ function selectChampionship(champ) {
             tbody.innerHTML += `
                 <tr>
                     <td><span class="pos-badge ${badgeClass}">${rec.final_position}</span></td>
-                    <td><strong style="color: #fff; font-size: 15px; font-style: italic; text-transform: uppercase;">${escapeHtml(rec.driver_name)}</strong></td>
-                    <td style="color: var(--text-muted);">${escapeHtml(friendlyCarName)}</td>
-                    <td style="text-align: center; font-weight: bold; font-family: monospace; color: #fff;">${rec.rpoints} pts</td>
+                    <td><strong style="color: #fff; font-size: 1rem;">${escapeHtml(rec.driver_name)}</strong></td>
+                    <td>${escapeHtml(friendlyCarName)}</td>
+                    <td style="text-align: center; font-weight: 800; color: #fff;">${rec.rpoints} pts</td>
                     <td style="text-align: center; font-weight: 800; color: #fff;">${rec.penalty_time} Pts</td>
-                    <td style="text-align: right; font-family: monospace; font-variant-numeric: tabular-nums; color: var(--text-light);">${formatLapTime(rec.best_lap_ms)}</td>
+                    <td style="text-align: right; font-variant-numeric: tabular-nums; color: var(--text-light);">${formatLapTime(rec.best_lap_ms)}</td>
                 </tr>
             `;
         });
@@ -1856,6 +1849,13 @@ function selectChampionship(champ) {
         if (str === null || str === undefined) return '';
         return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
+    
+    
+
+		// 2. Helper to get car class safely from model ID
+		function getCarClass(carModelKey) {
+		    return CAR_CLASSES[String(carModelKey)] || 'OTHER';
+		}
 
     fetchAllData();
 </script>
